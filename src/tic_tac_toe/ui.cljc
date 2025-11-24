@@ -20,6 +20,15 @@
       (for [cell row]
         (render-cell cell))])])
 
+(defn game->ui-data [{:keys [size tics]} player->mark]
+  {:rows
+   (for [y (range size)]
+     (for [x (range size)]
+       (if-let [player (get tics [y x])]
+         {:content (player->mark player)}
+         {:clickable? true
+          :on-click [:tic y x]})))})
+
 (def mark-x
   [:svg {:xmlns "http://www.w3.org/2000/svg"
          :viewBox "0 -10 108 100"}

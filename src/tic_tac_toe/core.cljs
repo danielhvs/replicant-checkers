@@ -1,5 +1,24 @@
-(ns tic-tac-toe.core)
+(ns tic-tac-toe.core
+  (:require [replicant.dom :as r]
+            [tic-tac-toe.game :as game]
+            [tic-tac-toe.ui :as ui]))
 
-(defn start-new-game [store])
+(defn start-new-game [store]
+  (reset! store (game/create-game {:size 3})))
 
-(defn main [store])
+(defn main [store]
+  (let [el (js/document.getElementById "app")]
+    ;; Globally handle DOM events
+    (r/set-dispatch!
+     (fn [_ event-handler-data]
+       (prn event-handler-data)))
+    (r/set-dispatch!
+     (fn [_ [action & args]]
+       (case action
+         :tic (apply swap! store game/tic args))))
+    ;; Render on every change
+    (add-watch store ::render
+               (fn [_ _ _ game]
+                 (->> (ui/game->ui-data game {:x ui/mark-x :o ui/mark-o})
+                      ui/render-board
+                      (r/render el))))))
