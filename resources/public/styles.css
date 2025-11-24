@@ -9,3 +9,24 @@
     position: relative;
     width: 100%;
 }
+
+.cell-content {
+    opacity: 1;
+    transition: opacity 0.25s;
+}
+
+.transparent {
+    opacity: 0;
+}
+
+.cell-dim {
+    background: rgba(249, 249, 240, 0.3);
+}
+
+.cell-highlight {
+    background: #fcfcf3;
+}
+
+.clickable {
+    cursor: pointer;
+}
