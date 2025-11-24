@@ -33,6 +33,31 @@
    {:content    ui/mark-o
     :highlight? true}))
 
+(defscene empty-board
+  (ui/render-board
+   {:rows [[{} {} {}]
+           [{} {} {}]
+           [{} {} {}]]}))
+
+(defscene partial-board
+  (ui/render-board
+   {:rows [[{:content ui/mark-o} {} {}]
+           [{:content ui/mark-x} {:content ui/mark-o} {}]
+           [{} {} {}]]}))
+
+(defscene winning-board
+  (ui/render-board
+   {:rows [[{:dim? true}
+            {:content    ui/mark-o
+             :highlight? true}
+            {:dim? true}]
+           [{:content ui/mark-x :dim? true}
+            {:content ui/mark-o :highlight? true}
+            {:dim? true}]
+           [{:dim? true}
+            {:content ui/mark-o :highlight? true}
+            {:content ui/mark-x :dim? true}]]}))
+
 (defn main []
   (portfolio/start!
    {:config

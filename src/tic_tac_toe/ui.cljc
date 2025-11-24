@@ -13,6 +13,13 @@
        :replicant/unmounting {:class "transparent"}}
       content])])
 
+(defn render-board [{:keys [rows]}]
+  [:div.board
+   (for [row rows]
+     [:div.row
+      (for [cell row]
+        (render-cell cell))])])
+
 (def mark-x
   [:svg {:xmlns "http://www.w3.org/2000/svg"
          :viewBox "0 -10 108 100"}
