@@ -3,6 +3,15 @@
             [portfolio.ui :as portfolio]
             [tic-tac-toe.ui :as ui]))
 
+(defn zebra-board [board]
+  (map-indexed (fn [i row]
+                 (map-indexed (fn [j cell]
+                                (if (zero? (mod (+ i j) 2))
+                                  cell
+                                  (assoc cell :highlight? true)))
+                              row))
+               board))
+
 (defscene empty-cell
   (ui/render-cell {:clickable? true}))
 
@@ -35,28 +44,29 @@
 
 (defscene empty-board
   (ui/render-board
-   {:rows [[{} {} {}]
-           [{} {} {}]
-           [{} {} {}]]}))
+   {:rows (zebra-board
+           [[{} {} {} {} {} {} {} {}]
+            [{} {} {} {} {} {} {} {}]
+            [{} {} {} {} {} {} {} {}]
+            [{} {} {} {} {} {} {} {}]
+            [{} {} {} {} {} {} {} {}]
+            [{} {} {} {} {} {} {} {}]
+            [{} {} {} {} {} {} {} {}]
+            [{} {} {} {} {} {} {} {}]
+            [{} {} {} {} {} {} {} {}]])}))
 
 (defscene partial-board
-  (ui/render-board
-   {:rows [[{:content ui/mark-o} {} {}]
-           [{:content ui/mark-x} {:content ui/mark-o} {}]
-           [{} {} {}]]}))
-
-(defscene winning-board
-  (ui/render-board
-   {:rows [[{:dim? true}
-            {:content    ui/mark-o
-             :highlight? true}
-            {:dim? true}]
-           [{:content ui/mark-x :dim? true}
-            {:content ui/mark-o :highlight? true}
-            {:dim? true}]
-           [{:dim? true}
-            {:content ui/mark-o :highlight? true}
-            {:content ui/mark-x :dim? true}]]}))
+  (let [board [[{:content ui/mark-o} {} {} {} {} {} {} {}]
+               [{} {} {:content ui/mark-x} {} {} {} {} {}]
+               [{} {} {} {} {} {} {} {}]
+               [{} {} {} {} {} {} {} {}]
+               [{} {} {} {} {} {} {} {}]
+               [{} {} {} {} {} {} {} {}]
+               [{} {} {} {} {} {} {} {}]
+               [{} {} {} {} {} {} {} {}]
+               [{} {} {} {} {} {} {} {}]]]
+    (ui/render-board
+     {:rows (zebra-board board)})))
 
 (defn main []
   (portfolio/start!
