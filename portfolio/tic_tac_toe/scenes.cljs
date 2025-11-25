@@ -52,13 +52,11 @@
             [{} {} {} {} {} {} {} {}]
             [{} {} {} {} {} {} {} {}]
             [{} {} {} {} {} {} {} {}]
-            [{} {} {} {} {} {} {} {}]
             [{} {} {} {} {} {} {} {}]])}))
 
 (defscene partial-board
-  (let [board [[{:content ui/mark-o} {} {} {} {} {} {} {}]
+  (let [board [[{} {:content ui/mark-o} {} {} {} {} {} {}]
                [{} {} {:content ui/mark-x} {} {} {} {} {}]
-               [{} {} {} {} {} {} {} {}]
                [{} {} {} {} {} {} {} {}]
                [{} {} {} {} {} {} {} {}]
                [{} {} {} {} {} {} {} {}]
@@ -67,6 +65,27 @@
                [{} {} {} {} {} {} {} {}]]]
     (ui/render-board
      {:rows (zebra-board board)})))
+
+(defscene full-board
+  (let [board [[{} {} {} {} {} {} {} {}]
+               [{} {} {} {} {} {} {} {}]
+               [{} {} {} {} {} {} {} {}]
+               [{} {} {} {} {} {} {} {}]
+               [{} {} {} {} {} {} {} {}]
+               [{} {} {} {} {} {} {} {}]
+               [{} {} {} {} {} {} {} {}]
+               [{} {} {} {} {} {} {} {}]]
+        full  (map-indexed (fn [i row]
+                             (map-indexed (fn [j cell]
+                                            (if (zero? (mod (+ i j) 2))
+                                              cell
+                                              (cond-> cell
+                                                (> i 4) (assoc :content ui/mark-o)
+                                                (< i 3) (assoc :content ui/mark-x))))
+                                          row))
+                           board)]
+    (ui/render-board
+     {:rows (zebra-board full)})))
 
 (defn main []
   (portfolio/start!
