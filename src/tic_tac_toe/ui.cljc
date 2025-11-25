@@ -20,14 +20,22 @@
       (for [cell row]
         (render-cell cell))])])
 
-(defn game->ui-data [{:keys [size tics]} player->mark]
-  {:rows
-   (for [y (range size)]
-     (for [x (range size)]
-       (if-let [player (get tics [y x])]
-         {:content (player->mark player)}
-         {:clickable? true
-          :on-click [:tic y x]})))})
+(defn game->ui-data [{:keys [size tics victory]} player->mark]
+  (let [highlight? (set (:path victory))]
+    {:rows
+     (for [y (range size)]
+       (for [x (range size)]
+         (if-let [player (get tics [y x])]
+           (let [victorious? (highlight? [y x])]
+             (cond-> {:content (player->mark player)}
+               victorious? (assoc :highlight? true)
+               (and victory (not victorious?)) (assoc :dim? true)))
+           (do
+             (println "victory:" victory)
+             (if victory
+               {:dim? true}
+               {:clickable? true
+                :on-click [:tic y x]})))))}))
 
 (def mark-x
   [:svg {:xmlns "http://www.w3.org/2000/svg"
