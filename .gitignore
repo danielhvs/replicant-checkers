@@ -1,3 +1,7 @@
 /node_modules/
 /resources/public/portfolio-js/
 /resources/public/app-js/
+/.shadow-cljs/
+/.lsp/
+/.cpcache/
+/.clj-kondo/
