@@ -15,7 +15,7 @@
     (r/set-dispatch!
      (fn [_ [action & args]]
        (case action
-         :tic (apply swap! store game/tic args))))
+         :move (apply swap! store game/move args))))
     ;; Render on every change
     (add-watch store ::render
                (fn [_ _ _ game]

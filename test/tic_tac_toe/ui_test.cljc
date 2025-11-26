@@ -15,6 +15,6 @@
             [nil {:clickable? true, :content mark-x, :highlight? true} nil {:clickable? true, :content mark-x, :highlight? true} nil {:clickable? true, :content mark-x, :highlight? true} nil {:clickable? true, :content mark-x, :highlight? true}]
             [{:clickable? true, :content mark-x, :highlight? true} nil {:clickable? true, :content mark-x, :highlight? true} nil {:clickable? true, :content mark-x, :highlight? true} nil {:clickable? true, :content mark-x, :highlight? true} nil]]
            (-> (game/create-game)
-               (game/tic [5 0] [4 1])
+               (game/move [5 0] [4 1])
                (ui/game->ui-data)
                :rows)))))

@@ -13,7 +13,7 @@
                     [nil :x nil :x nil :x nil :x]
                     [:x nil :x nil :x nil :x nil]]})
 
-(defn tic [game [from-y from-x] [to-y to-x]]
+(defn move [game [from-y from-x] [to-y to-x]]
   (let [player (:current-player game)]
     (-> game
         (assoc-in [:board from-y from-x] nil)
