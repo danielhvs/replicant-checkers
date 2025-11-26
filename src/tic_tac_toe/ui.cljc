@@ -220,7 +220,6 @@
   {:rows
    (map-indexed (fn [i row]
                   (map-indexed (fn [j cell]
-                                 (println "cell:" cell)
                                  (if (zero? (mod (+ i j) 2))
                                    cell
                                    (cond-> {:highlight? true}

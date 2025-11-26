@@ -1,23 +1,20 @@
 (ns tic-tac-toe.ui-test
-  (:require [tic-tac-toe.ui :as ui]
-            [clojure.test :refer [deftest is testing]]))
+  (:require
+   [clojure.test :refer [deftest is testing]]
+   [tic-tac-toe.game :as game]
+   [tic-tac-toe.ui :as ui :refer [mark-o mark-x]]))
 
 (deftest game->ui-data-test
-  #_(testing "Converts game data to UI data"
-      (is (= (ui/game->ui-data
-              {:size        3
-               :tics        {[0 0] :x
-                             [0 1] :o}
-               :next-player :x}
-              {:x "x"
-               :o "o"})
-             {:rows [[{:content "x"}
-                      {:content "o"}
-                      {:clickable? true
-                       :on-click   [:tic 0 2]}]
-                     [{:clickable? true, :on-click [:tic 1 0]}
-                      {:clickable? true, :on-click [:tic 1 1]}
-                      {:clickable? true, :on-click [:tic 1 2]}]
-                     [{:clickable? true, :on-click [:tic 2 0]}
-                      {:clickable? true, :on-click [:tic 2 1]}
-                      {:clickable? true, :on-click [:tic 2 2]}]]}))))
+  (testing "Converts game data to UI data"
+    (is (= [[nil {:clickable? true, :content mark-o, :highlight? true} nil {:clickable? true, :content mark-o, :highlight? true} nil {:clickable? true, :content mark-o, :highlight? true} nil {:clickable? true, :content mark-o, :highlight? true}]
+            [{:clickable? true, :content mark-o, :highlight? true} nil {:clickable? true, :content mark-o, :highlight? true} nil {:clickable? true, :content mark-o, :highlight? true} nil {:clickable? true, :content mark-o, :highlight? true} nil]
+            [nil {:clickable? true, :content mark-o, :highlight? true} nil {:clickable? true, :content mark-o, :highlight? true} nil {:clickable? true, :content mark-o, :highlight? true} nil {:clickable? true, :content mark-o, :highlight? true}]
+            [{:highlight? true} nil {:highlight? true} nil {:highlight? true} nil {:highlight? true} nil]
+            [nil {:clickable? true, :content mark-x, :highlight? true} nil {:highlight? true} nil {:highlight? true} nil {:highlight? true}]
+            [{:highlight? true} nil {:clickable? true, :content mark-x, :highlight? true} nil {:clickable? true, :content mark-x, :highlight? true} nil {:clickable? true, :content mark-x, :highlight? true} nil]
+            [nil {:clickable? true, :content mark-x, :highlight? true} nil {:clickable? true, :content mark-x, :highlight? true} nil {:clickable? true, :content mark-x, :highlight? true} nil {:clickable? true, :content mark-x, :highlight? true}]
+            [{:clickable? true, :content mark-x, :highlight? true} nil {:clickable? true, :content mark-x, :highlight? true} nil {:clickable? true, :content mark-x, :highlight? true} nil {:clickable? true, :content mark-x, :highlight? true} nil]]
+           (-> (game/create-game)
+               (game/tic [5 0] [4 1])
+               (ui/game->ui-data)
+               :rows)))))
