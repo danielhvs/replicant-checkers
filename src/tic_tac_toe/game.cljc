@@ -13,6 +13,16 @@
                     [nil :x nil :x nil :x nil :x]
                     [:x nil :x nil :x nil :x nil]]})
 
+(defn move-left [current-player [y x]]
+  (let [move-fn (current-player {:x (fn [y x] [(dec y) (dec x)])
+                                 :o (fn [y x] [(inc y) (inc x)])})]
+    (move-fn y x)))
+
+(defn move-right [current-player [y x]]
+  (let [move-fn (current-player {:x (fn [y x] [(dec y) (inc x)])
+                                 :o (fn [y x] [(inc y) (dec x)])})]
+    (move-fn y x)))
+
 (defn- grab-piece [game [y x]]
   (-> game
       (assoc :grabbing [y x])
@@ -26,9 +36,8 @@
         (assoc :current-player (next-player player)))))
 
 (defn can-drop? [{:keys [current-player board]} [from-y from-x] [to-y to-x]]
-  (let [y-fn           (current-player {:x dec :o inc})
-        possible-moves (set [[(y-fn from-y) (inc from-x)]
-                             [(y-fn from-y) (dec from-x)]])
+  (let [possible-moves (set [(move-left current-player [from-y from-x])
+                             (move-right current-player [from-y from-x])])
         opponent-piece (get-in board [to-y to-x])]
     (and (not opponent-piece)
          (possible-moves [to-y to-x]))))
