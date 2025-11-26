@@ -50,20 +50,23 @@
         [right-y right-x] (move-right-fn from)]
     (when (or (= opponent (get-in board [right-y right-x]))
               (= opponent (get-in board [left-y left-x])))
-      (println "yes:")
-      (let [bla (-> from move-right-fn move-right-fn)
-            lol (-> from move-left-fn move-left-fn)]
-        (println "bla:" bla)
-        (println "lol:" lol)
-        (println "to:" to)
-        (or (= to bla)
-            (= to lol))))))
+      (or (= to (-> from move-right-fn move-right-fn))
+          (= to (-> from move-left-fn move-left-fn))))))
+
+(defn diagonal-between [{:keys [current-player]} from to]
+  (let [right (move-right current-player from)
+        left  (move-left current-player from)]
+    (cond
+      (= to (move-right current-player right)) right
+      (= to (move-left current-player left))   left)))
 
 (defn- drop-piece [game piece [y x]]
   (if (would-take? game piece [y x])
-    (-> game
-        (dissoc :grabbing)
-        (move piece [y x]))
+    (let [[opponent-y opponent-x] (diagonal-between game piece [y x])]
+      (-> game
+          (dissoc :grabbing)
+          (assoc-in [:board opponent-y opponent-x] nil)
+          (move piece [y x])))
     (if (can-drop? game piece [y x])
       (-> game
           (dissoc :grabbing)
