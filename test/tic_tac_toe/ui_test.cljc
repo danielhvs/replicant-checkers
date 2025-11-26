@@ -27,8 +27,6 @@
              :highlight? true
              :on-click   [:tic [0 7]]}]
            (-> (game/create-game)
-               (game/tic [5 0])
-               (game/tic [4 1])
                (ui/game->ui-data)
                :rows
                first)))))
