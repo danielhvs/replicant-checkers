@@ -1,8 +1,7 @@
 (ns tic-tac-toe.game-test
   (:require
    [clojure.test :refer [deftest is testing]]
-   [tic-tac-toe.game :as game]
-   [tic-tac-toe.ui :as ui :refer [mark-o mark-x]]))
+   [tic-tac-toe.game :as game]))
 
 (deftest tic-tac-toe-test
   (testing "fresh game"
@@ -28,4 +27,16 @@
                              [nil nil :x nil :x nil :x nil]
                              [nil :x nil :x nil :x nil :x]
                              [:x nil :x nil :x nil :x nil]]})))
-  (testing "Show ui"))
+  (testing "X grabs a piece"
+    (is (= {:current-player :x
+            :grabbing       [5 0]
+            :board          [[nil :o nil :o nil :o nil :o]
+                             [:o nil :o nil :o nil :o nil]
+                             [nil :o nil :o nil :o nil :o]
+                             [nil nil nil nil nil nil nil nil]
+                             [nil nil nil nil nil nil nil nil]
+                             [nil nil :x nil :x nil :x nil]
+                             [nil :x nil :x nil :x nil :x]
+                             [:x nil :x nil :x nil :x nil]]}
+           (-> (game/create-game)
+               (game/grab [5 0]))))))

@@ -1,4 +1,6 @@
-(ns tic-tac-toe.game)
+(ns tic-tac-toe.game
+  (:require
+   [tic-tac-toe.game :as game]))
 
 (def next-player {:x :o :o :x})
 
@@ -12,6 +14,18 @@
                     [:x nil :x nil :x nil :x nil]
                     [nil :x nil :x nil :x nil :x]
                     [:x nil :x nil :x nil :x nil]]})
+
+(defn grab-piece [game [y x]]
+  (-> game
+      (assoc :grabbing [y x])
+      (assoc-in [:board y x] nil)))
+
+(defn grab [game [y x]]
+  (let [player (:current-player game)
+        piece  (get-in game [:board y x])]
+    (cond-> game
+      (= piece player)
+      (grab-piece [y x]))))
 
 (defn move [game [from-y from-x] [to-y to-x]]
   (let [player (:current-player game)]
