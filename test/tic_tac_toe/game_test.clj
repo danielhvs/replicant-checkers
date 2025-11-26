@@ -81,4 +81,22 @@
            (-> (game/create-game)
                (game/tic [5 0])
                (game/tic [0 1])
-               (game/tic [4 1]))))))
+               (game/tic [4 1])))))
+  (testing "X can't occupy same spot as O"
+    (is (= {:current-player :x
+            :grabbing       [4 1]
+            :board          [[nil :o nil :o nil :o nil :o]
+                             [:o nil :o nil :o nil :o nil]
+                             [nil nil nil :o nil :o nil :o]
+                             [nil nil :o nil nil nil nil nil]
+                             [nil nil nil nil nil nil nil nil]
+                             [nil nil :x nil :x nil :x nil]
+                             [nil :x nil :x nil :x nil :x]
+                             [:x nil :x nil :x nil :x nil]]}
+           (-> (game/create-game)
+               (game/tic [5 0])
+               (game/tic [4 1])
+               (game/tic [2 1])
+               (game/tic [3 2])
+               (game/tic [4 1])
+               (game/tic [3 2]))))))
