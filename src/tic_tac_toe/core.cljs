@@ -19,6 +19,6 @@
     ;; Render on every change
     (add-watch store ::render
                (fn [_ _ _ game]
-                 (->> (ui/game->ui-data game {:x ui/mark-x :o ui/mark-o})
-                      ui/render-board
+                 (->> (ui/game->ui-data game)
+                      (ui/render-board)
                       (r/render el))))))
