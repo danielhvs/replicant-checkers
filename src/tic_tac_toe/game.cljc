@@ -25,10 +25,19 @@
         (assoc-in [:board to-y to-x] player)
         (assoc :current-player (next-player player)))))
 
+(defn can-drop? [{:keys [current-player board]} [from-y from-x] [to-y to-x]]
+  (let [y-fn           (current-player {:x dec :o inc})
+        possible-moves (set [[(y-fn from-y) (inc from-x)]
+                             [(y-fn from-y) (dec from-x)]])]
+    (println "possible-moves:" possible-moves)
+    (possible-moves [to-y to-x])))
+
 (defn- drop-piece [game piece [y x]]
-  (-> game
-      (dissoc :grabbing)
-      (move piece [y x])))
+  (if (can-drop? game piece [y x])
+    (-> game
+        (dissoc :grabbing)
+        (move piece [y x]))
+    game))
 
 (defn tic [{:keys [current-player grabbing] :as game} [y x]]
   (let [piece (get-in game [:board y x])]
