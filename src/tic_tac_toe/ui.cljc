@@ -222,8 +222,8 @@
                   (map-indexed (fn [j cell]
                                  (if (zero? (mod (+ i j) 2))
                                    cell
-                                   (cond-> {:highlight? true}
-                                     (= :o cell) (assoc :clickable? true :content mark-o :on-click [:tic [i j]])
-                                     (= :x cell) (assoc :clickable? true :content mark-x :on-click [:tic [i j]]))))
+                                   (cond-> {:highlight? true :clickable? true :on-click [:tic [i j]]}
+                                     (= :o cell) (assoc :content mark-o)
+                                     (= :x cell) (assoc :content mark-x))))
                                row))
                 board)})

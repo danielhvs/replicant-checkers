@@ -18,16 +18,20 @@
       (assoc :grabbing [y x])
       (assoc-in [:board y x] nil)))
 
-(defn tic [game [y x]]
-  (let [player (:current-player game)
-        piece  (get-in game [:board y x])]
-    (cond-> game
-      (= piece player)
-      (grab-piece [y x]))))
-
 (defn move [game [from-y from-x] [to-y to-x]]
   (let [player (:current-player game)]
     (-> game
         (assoc-in [:board from-y from-x] nil)
         (assoc-in [:board to-y to-x] player)
         (assoc :current-player (next-player player)))))
+
+(defn drop-piece [game piece [y x]]
+  (-> game
+      (dissoc :grabbing)
+      (move piece [y x])))
+
+(defn tic [{:keys [current-player grabbing] :as game} [y x]]
+  (let [piece (get-in game [:board y x])]
+    (cond-> game
+      grabbing                 (drop-piece grabbing [y x])
+      (= piece current-player) (grab-piece [y x]))))
