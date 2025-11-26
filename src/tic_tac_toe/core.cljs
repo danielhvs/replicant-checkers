@@ -4,7 +4,7 @@
             [tic-tac-toe.ui :as ui]))
 
 (defn start-new-game [store]
-  (reset! store (game/create-game {:size 3})))
+  (reset! store (game/create-game)))
 
 (defn main [store]
   (let [el (js/document.getElementById "app")]
