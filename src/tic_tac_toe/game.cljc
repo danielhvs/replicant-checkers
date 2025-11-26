@@ -13,19 +13,19 @@
                     [nil :x nil :x nil :x nil :x]
                     [:x nil :x nil :x nil :x nil]]})
 
-(defn grab-piece [game [y x]]
+(defn- grab-piece [game [y x]]
   (-> game
       (assoc :grabbing [y x])
       (assoc-in [:board y x] nil)))
 
-(defn move [game [from-y from-x] [to-y to-x]]
+(defn- move [game [from-y from-x] [to-y to-x]]
   (let [player (:current-player game)]
     (-> game
         (assoc-in [:board from-y from-x] nil)
         (assoc-in [:board to-y to-x] player)
         (assoc :current-player (next-player player)))))
 
-(defn drop-piece [game piece [y x]]
+(defn- drop-piece [game piece [y x]]
   (-> game
       (dissoc :grabbing)
       (move piece [y x])))
