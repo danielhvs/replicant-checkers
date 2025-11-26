@@ -18,7 +18,7 @@
       (assoc :grabbing [y x])
       (assoc-in [:board y x] nil)))
 
-(defn grab [game [y x]]
+(defn tic [game [y x]]
   (let [player (:current-player game)
         piece  (get-in game [:board y x])]
     (cond-> game
