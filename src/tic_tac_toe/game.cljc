@@ -1,6 +1,4 @@
-(ns tic-tac-toe.game
-  (:require
-   [tic-tac-toe.game :as game]))
+(ns tic-tac-toe.game)
 
 (def next-player {:x :o :o :x})
 
