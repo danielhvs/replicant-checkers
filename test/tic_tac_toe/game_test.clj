@@ -39,4 +39,4 @@
                              [nil :x nil :x nil :x nil :x]
                              [:x nil :x nil :x nil :x nil]]}
            (-> (game/create-game)
-               (game/grab [5 0]))))))
+               (game/tic [5 0]))))))

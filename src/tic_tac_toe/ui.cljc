@@ -223,7 +223,7 @@
                                  (if (zero? (mod (+ i j) 2))
                                    cell
                                    (cond-> {:highlight? true}
-                                     (= :o cell) (assoc :clickable? true :content mark-o)
-                                     (= :x cell) (assoc :clickable? true :content mark-x))))
+                                     (= :o cell) (assoc :clickable? true :content mark-o :on-click [:tic [i j]])
+                                     (= :x cell) (assoc :clickable? true :content mark-x :on-click [:tic [i j]]))))
                                row))
                 board)})
