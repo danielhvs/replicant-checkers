@@ -42,12 +42,33 @@
     (and (not opponent-piece)
          (possible-moves [to-y to-x]))))
 
+(defn- would-take? [{:keys [current-player board]} from to]
+  (let [opponent          (next-player current-player)
+        move-left-fn      (partial move-left current-player)
+        move-right-fn     (partial move-right current-player)
+        [left-y left-x]   (move-left-fn from)
+        [right-y right-x] (move-right-fn from)]
+    (when (or (= opponent (get-in board [right-y right-x]))
+              (= opponent (get-in board [left-y left-x])))
+      (println "yes:")
+      (let [bla (-> from move-right-fn move-right-fn)
+            lol (-> from move-left-fn move-left-fn)]
+        (println "bla:" bla)
+        (println "lol:" lol)
+        (println "to:" to)
+        (or (= to bla)
+            (= to lol))))))
+
 (defn- drop-piece [game piece [y x]]
-  (if (can-drop? game piece [y x])
+  (if (would-take? game piece [y x])
     (-> game
         (dissoc :grabbing)
         (move piece [y x]))
-    game))
+    (if (can-drop? game piece [y x])
+      (-> game
+          (dissoc :grabbing)
+          (move piece [y x]))
+      game)))
 
 (defn tic [{:keys [current-player grabbing] :as game} [y x]]
   (let [piece (get-in game [:board y x])]
