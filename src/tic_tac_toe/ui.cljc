@@ -20,23 +20,6 @@
       (for [cell row]
         (render-cell cell))])])
 
-(defn game->ui-data [{:keys [size tics victory]} player->mark]
-  (let [highlight? (set (:path victory))]
-    {:rows
-     (for [y (range size)]
-       (for [x (range size)]
-         (if-let [player (get tics [y x])]
-           (let [victorious? (highlight? [y x])]
-             (cond-> {:content (player->mark player)}
-               victorious? (assoc :highlight? true)
-               (and victory (not victorious?)) (assoc :dim? true)))
-           (do
-             (println "victory:" victory)
-             (if victory
-               {:dim? true}
-               {:clickable? true
-                :on-click [:tic y x]})))))}))
-
 (defn- new-function [color]
   [:svg
    {:preserveAspectRatio "xMidYMid meet"
@@ -232,3 +215,16 @@
 
 (def mark-o
   (new-function "#0000ff"))
+
+(defn game->ui-data [{:keys [board]}]
+  {:rows
+   (map-indexed (fn [i row]
+                  (map-indexed (fn [j cell]
+                                 (println "cell:" cell)
+                                 (if (zero? (mod (+ i j) 2))
+                                   cell
+                                   (cond-> {:highlight? true}
+                                     (= :o cell) (assoc :clickable? true :content mark-o)
+                                     (= :x cell) (assoc :clickable? true :content mark-x))))
+                               row))
+                board)})

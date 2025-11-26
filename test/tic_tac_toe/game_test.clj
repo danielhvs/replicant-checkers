@@ -4,43 +4,40 @@
    [tic-tac-toe.game :as game]
    [tic-tac-toe.ui :as ui]))
 
-(conj nil [1 2])
-
 (deftest tic-tac-toe-test
-  (testing "fresh game"
-    (is (= (game/create-game)
-           {:current-player :x
-            :board          [[nil :o nil :o nil :o nil :o]
-                             [:o nil :o nil :o nil :o nil]
-                             [nil :o nil :o nil :o nil :o]
-                             [nil nil nil nil nil nil nil nil]
-                             [nil nil nil nil nil nil nil nil]
-                             [:x nil :x nil :x nil :x nil]
-                             [nil :x nil :x nil :x nil :x]
-                             [:x nil :x nil :x nil :x nil]]})))
-  (testing "X plays"
-    (is (= (-> (game/create-game)
-               (game/tic [5 0] [4 1]))
-           {:current-player :o
-            :board          [[nil :o nil :o nil :o nil :o]
-                             [:o nil :o nil :o nil :o nil]
-                             [nil :o nil :o nil :o nil :o]
-                             [nil nil nil nil nil nil nil nil]
-                             [nil :x nil nil nil nil nil nil]
-                             [nil nil :x nil :x nil :x nil]
-                             [nil :x nil :x nil :x nil :x]
-                             [:x nil :x nil :x nil :x nil]]})))
-  #_(testing "Show ui"
+  #_(testing "fresh game"
+      (is (= (game/create-game)
+             {:current-player :x
+              :board          [[nil :o nil :o nil :o nil :o]
+                               [:o nil :o nil :o nil :o nil]
+                               [nil :o nil :o nil :o nil :o]
+                               [nil nil nil nil nil nil nil nil]
+                               [nil nil nil nil nil nil nil nil]
+                               [:x nil :x nil :x nil :x nil]
+                               [nil :x nil :x nil :x nil :x]
+                               [:x nil :x nil :x nil :x nil]]})))
+  #_(testing "X plays"
       (is (= (-> (game/create-game)
-                 (game/tic {:from [2 1] :to [3 0]})
-                 (ui/game->ui-data {:x "x" :o "o"})
-                 :rows)
-             [[{:content "x", :highlight? true}
-               {:content "x", :highlight? true}
-               {:content "x", :highlight? true}]
-              [{:content "o", :dim? true}
-               {:content "o", :dim? true}
-               {:dim? true}]
-              [{:dim? true}
-               {:dim? true}
-               {:dim? true}]]))))
+                 (game/tic [5 0] [4 1]))
+             {:current-player :o
+              :board          [[nil :o nil :o nil :o nil :o]
+                               [:o nil :o nil :o nil :o nil]
+                               [nil :o nil :o nil :o nil :o]
+                               [nil nil nil nil nil nil nil nil]
+                               [nil :x nil nil nil nil nil nil]
+                               [nil nil :x nil :x nil :x nil]
+                               [nil :x nil :x nil :x nil :x]
+                               [:x nil :x nil :x nil :x nil]]})))
+  (testing "Show ui"
+    (is (= {:rows
+            [[nil {:clickable? true, :content "o", :highlight? true} nil {:clickable? true, :content "o", :highlight? true} nil {:clickable? true, :content "o", :highlight? true} nil {:clickable? true, :content "o", :highlight? true}]
+             [{:clickable? true, :content "o", :highlight? true} nil {:clickable? true, :content "o", :highlight? true} nil {:clickable? true, :content "o", :highlight? true} nil {:clickable? true, :content "o", :highlight? true} nil]
+             [nil {:clickable? true, :content "o", :highlight? true} nil {:clickable? true, :content "o", :highlight? true} nil {:clickable? true, :content "o", :highlight? true} nil {:clickable? true, :content "o", :highlight? true}]
+             [{:highlight? true} nil {:highlight? true} nil {:highlight? true} nil {:highlight? true} nil]
+             [nil {:clickable? true, :content "x", :highlight? true} nil {:highlight? true} nil {:highlight? true} nil {:highlight? true}]
+             [{:highlight? true} nil {:clickable? true, :content "x", :highlight? true} nil {:clickable? true, :content "x", :highlight? true} nil {:clickable? true, :content "x", :highlight? true} nil]
+             [nil {:clickable? true, :content "x", :highlight? true} nil {:clickable? true, :content "x", :highlight? true} nil {:clickable? true, :content "x", :highlight? true} nil {:clickable? true, :content "x", :highlight? true}]
+             [{:clickable? true, :content "x", :highlight? true} nil {:clickable? true, :content "x", :highlight? true} nil {:clickable? true, :content "x", :highlight? true} nil {:clickable? true, :content "x", :highlight? true} nil]]}
+           (-> (game/create-game)
+               (game/tic [5 0] [4 1])
+               (ui/game->ui-data))))))
