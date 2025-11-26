@@ -17,7 +17,8 @@
                              [:x nil :x nil :x nil :x nil]]})))
   (testing "X plays"
     (is (= (-> (game/create-game)
-               (game/move [5 0] [4 1]))
+               (game/tic [5 0])
+               (game/tic [4 1]))
            {:current-player :o
             :board          [[nil :o nil :o nil :o nil :o]
                              [:o nil :o nil :o nil :o nil]
