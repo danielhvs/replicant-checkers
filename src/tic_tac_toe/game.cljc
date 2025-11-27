@@ -38,20 +38,22 @@
 (defn can-drop? [{:keys [current-player board]} [from-y from-x] [to-y to-x]]
   (let [possible-moves (set [(move-left current-player [from-y from-x])
                              (move-right current-player [from-y from-x])])
-        opponent-piece (get-in board [to-y to-x])]
-    (and (not opponent-piece)
+        piece-in-spot  (get-in board [to-y to-x])]
+    (and (not piece-in-spot)
          (possible-moves [to-y to-x]))))
 
-(defn- would-take? [{:keys [current-player board]} from to]
+(defn- would-take? [{:keys [current-player board] :as game} from to]
   (let [opponent          (next-player current-player)
         move-left-fn      (partial move-left current-player)
         move-right-fn     (partial move-right current-player)
         [left-y left-x]   (move-left-fn from)
-        [right-y right-x] (move-right-fn from)]
-    (when (or (= opponent (get-in board [right-y right-x]))
-              (= opponent (get-in board [left-y left-x])))
-      (or (= to (-> from move-right-fn move-right-fn))
-          (= to (-> from move-left-fn move-left-fn))))))
+        [right-y right-x] (move-right-fn from)
+        piece-in-spot     (get-in board to)]
+    (when (not piece-in-spot)
+      (when (or (= opponent (get-in board [right-y right-x]))
+                (= opponent (get-in board [left-y left-x])))
+        (or (= to (-> from move-right-fn move-right-fn))
+            (= to (-> from move-left-fn move-left-fn)))))))
 
 (defn diagonal-between [{:keys [current-player]} from to]
   (let [right (move-right current-player from)
@@ -61,20 +63,22 @@
       (= to (move-left current-player left))   left)))
 
 (defn- drop-piece [game piece [y x]]
-  (if (would-take? game piece [y x])
+  (cond
+    (can-drop? game piece [y x])
+    (-> game
+        (dissoc :grabbing)
+        (move piece [y x]))
+    (would-take? game piece [y x])
     (let [[opponent-y opponent-x] (diagonal-between game piece [y x])]
       (-> game
           (dissoc :grabbing)
           (assoc-in [:board opponent-y opponent-x] nil)
           (move piece [y x])))
-    (if (can-drop? game piece [y x])
-      (-> game
-          (dissoc :grabbing)
-          (move piece [y x]))
-      game)))
+    :else game))
 
 (defn tic [{:keys [current-player grabbing] :as game} [y x]]
   (let [piece (get-in game [:board y x])]
-    (cond-> game
-      grabbing                 (drop-piece grabbing [y x])
-      (= piece current-player) (grab-piece [y x]))))
+    (cond
+      grabbing                 (drop-piece game grabbing [y x])
+      (= piece current-player) (grab-piece game [y x])
+      :else                    game)))
