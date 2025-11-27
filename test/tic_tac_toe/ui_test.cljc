@@ -6,7 +6,11 @@
 
 (deftest game->ui-data-test
   (testing "Converts game data to UI data"
-    (is (= [nil
+    (is (= (-> (game/create-game)
+               (ui/game->ui-data)
+               :rows
+               first)
+           [nil
             {:clickable? true
              :content    mark-o
              :highlight? true
@@ -25,8 +29,4 @@
             {:clickable? true
              :content    mark-o
              :highlight? true
-             :on-click   [:tic [0 7]]}]
-           (-> (game/create-game)
-               (ui/game->ui-data)
-               :rows
-               first)))))
+             :on-click   [:tic [0 7]]}]))))
