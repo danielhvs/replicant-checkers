@@ -13,11 +13,19 @@
        :replicant/unmounting {:class "transparent"}}
       content])])
 
-(defn render-board [{:keys [rows  mouse-x  mouse-y]}]
+(defn render-board [{:keys [rows mouse-x mouse-y grabbing-color]}]
   [:div
    {:on {:mousemove [:mouse]}}
-   [:p "x: " mouse-x]
-   [:p "y: " mouse-y]
+   (when grabbing-color
+     [:div {:style {:position         "fixed"
+                    :left             (str (- mouse-x 25) "px")
+                    :top              (str (- mouse-y 25) "px")
+                    :width            "45px"
+                    :height           "45px"
+                    :background-color grabbing-color
+                    :border-radius    "50%"
+                    :pointer-events   "none"
+                    :z-index          9999}}])
    [:div.board
     (for [row rows]
       [:div.row
@@ -44,7 +52,7 @@
 (def mark-o
   (new-function "#0000ff"))
 
-(defn game->ui-data [{:keys [board mouse-x mouse-y]}]
+(defn game->ui-data [{:keys [board mouse-x mouse-y grabbing current-player]}]
   {:rows
    (map-indexed (fn [i row]
                   (map-indexed (fn [j cell]
@@ -55,5 +63,7 @@
                                      (= :x cell) (assoc :content mark-x))))
                                row))
                 board)
-   :mouse-y mouse-y
-   :mouse-x mouse-x})
+   :mouse-y        mouse-y
+   :mouse-x        mouse-x
+   :grabbing-color (when grabbing
+                     (current-player {:x "red" :o "blue"}))})
