@@ -13,12 +13,16 @@
        :replicant/unmounting {:class "transparent"}}
       content])])
 
-(defn render-board [{:keys [rows]}]
-  [:div.board
-   (for [row rows]
-     [:div.row
-      (for [cell row]
-        (render-cell cell))])])
+(defn render-board [{:keys [rows  mouse-x  mouse-y]}]
+  [:div
+   {:on {:mousemove [:mouse]}}
+   [:p "x: " mouse-x]
+   [:p "y: " mouse-y]
+   [:div.board
+    (for [row rows]
+      [:div.row
+       (for [cell row]
+         (render-cell cell))])]])
 
 (defn- new-function [color]
   [:svg
@@ -40,7 +44,7 @@
 (def mark-o
   (new-function "#0000ff"))
 
-(defn game->ui-data [{:keys [board]}]
+(defn game->ui-data [{:keys [board mouse-x mouse-y]}]
   {:rows
    (map-indexed (fn [i row]
                   (map-indexed (fn [j cell]
@@ -50,4 +54,6 @@
                                      (= :o cell) (assoc :content mark-o)
                                      (= :x cell) (assoc :content mark-x))))
                                row))
-                board)})
+                board)
+   :mouse-y mouse-y
+   :mouse-x mouse-x})
