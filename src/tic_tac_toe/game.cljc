@@ -74,7 +74,11 @@
           (dissoc :grabbing)
           (assoc-in [:board opponent-y opponent-x] nil)
           (move piece [y x])))
-    :else game))
+    :else
+    (let [[piece-y piece-x] piece]
+      (-> game
+          (dissoc :grabbing)
+          (assoc-in [:board piece-y piece-x] (:current-player game))))))
 
 (defn tic [{:keys [current-player grabbing] :as game} [y x]]
   (let [piece (get-in game [:board y x])]
