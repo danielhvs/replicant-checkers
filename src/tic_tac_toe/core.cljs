@@ -10,12 +10,16 @@
   (let [el (js/document.getElementById "app")]
     ;; Globally handle DOM events
     (r/set-dispatch!
-     (fn [{:keys [replicant/dom-event]} [action & args]]
-       (case action
-         :mouse (swap! store assoc
-                       :mouse-x (.-clientX dom-event)
-                       :mouse-y (.-clientY dom-event))
-         :tic   (apply swap! store game/tic args))))
+     (fn [{:keys [replicant/dom-event]} actions]
+       (doseq [[action & args] actions]
+         (case action
+           :tic        (apply swap! store game/tic args)
+           :mouse      (swap! store assoc
+                              :mouse-x (.-clientX dom-event)
+                              :mouse-y (.-clientY dom-event))
+           :play-audio (let [audio (.getElementById js/document "audioPlayer")]
+                         (.load audio)
+                         (.play audio))))))
     ;; Render on every change
     (add-watch store ::render
                (fn [_ _ _ game]

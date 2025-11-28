@@ -14,19 +14,19 @@
             {:clickable? true
              :content    mark-o
              :highlight? true
-             :on-click   [:tic [0 1]]}
+             :on-click   [[:tic [0 1]] [:play-audio]]}
             nil
             {:clickable? true
              :content    mark-o
              :highlight? true
-             :on-click   [:tic [0 3]]}
+             :on-click   [[:tic [0 3]] [:play-audio]]}
             nil
             {:clickable? true
              :content    mark-o
              :highlight? true
-             :on-click   [:tic [0 5]]}
+             :on-click   [[:tic [0 5]] [:play-audio]]}
             nil
             {:clickable? true
              :content    mark-o
              :highlight? true
-             :on-click   [:tic [0 7]]}]))))
+             :on-click   [[:tic [0 7]] [:play-audio]]}]))))

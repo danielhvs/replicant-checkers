@@ -15,7 +15,8 @@
 
 (defn render-board [{:keys [rows mouse-x mouse-y grabbing-color]}]
   [:div
-   {:on {:mousemove [:mouse]}}
+   {:on {:mousemove [[:mouse]]}}
+   [:audio {:id "audioPlayer" :src "blip.wav"}]
    (when grabbing-color
      [:div {:style {:position         "fixed"
                     :left             (str (- mouse-x 25) "px")
@@ -58,7 +59,9 @@
                   (map-indexed (fn [j cell]
                                  (if (zero? (mod (+ i j) 2))
                                    cell
-                                   (cond-> {:highlight? true :clickable? true :on-click [:tic [i j]]}
+                                   (cond-> {:highlight? true :clickable? true
+                                            :on-click [[:tic [i j]]
+                                                       [:play-audio]]}
                                      (= :o cell) (assoc :content mark-o)
                                      (= :x cell) (assoc :content mark-x))))
                                row))
