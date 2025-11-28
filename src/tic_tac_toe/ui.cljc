@@ -47,8 +47,8 @@
              :r    "400"
              :fill color}]])
 
-(def x-color "green")
-(def o-color "red")
+(def x-color "purple")
+(def o-color "pink")
 
 (def mark-x
   (new-function x-color))
