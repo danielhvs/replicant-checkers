@@ -47,11 +47,14 @@
              :r    "400"
              :fill color}]])
 
+(def x-color "green")
+(def o-color "red")
+
 (def mark-x
-  (new-function "#ff0000"))
+  (new-function x-color))
 
 (def mark-o
-  (new-function "#0000ff"))
+  (new-function o-color))
 
 (defn game->ui-data [{:keys [board mouse-x mouse-y grabbing current-player]}]
   {:rows
@@ -69,4 +72,4 @@
    :mouse-y        mouse-y
    :mouse-x        mouse-x
    :grabbing-color (when grabbing
-                     (current-player {:x "red" :o "blue"}))})
+                     (current-player {:x x-color :o o-color}))})
